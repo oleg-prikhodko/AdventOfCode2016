@@ -1,24 +1,28 @@
 import { readInputFile } from '../utils'
 
+type Register = 'a' | 'b' | 'c' | 'd'
+
+type Registers = { [R in Register]: number }
+
 interface Cpy {
   kind: 'cpy'
-  x: number | string
-  y: string
+  x: number | Register
+  y: Register
 }
 
 interface Inc {
   kind: 'inc'
-  x: string
+  x: Register
 }
 
 interface Dec {
   kind: 'dec'
-  x: string
+  x: Register
 }
 
 interface Jnz {
   kind: 'jnz'
-  x: number | string
+  x: number | Register
   y: number
 }
 
@@ -41,11 +45,11 @@ const instructions = readInputFile('day-12.txt')
     } as Instruction
   })
 
-function execute(initialRegisterValues: [string, number][]) {
-  const registers = new Map(initialRegisterValues)
+function execute(initialRegisterValues: Registers) {
+  const registers = Object.assign({}, initialRegisterValues)
 
-  const getNumValue = (arg: string | number) => {
-    return typeof arg === 'string' ? registers.get(arg)! : arg
+  const getNumValue = (arg: Register | number) => {
+    return typeof arg === 'string' ? registers[arg] : arg
   }
 
   let counter = 0
@@ -54,18 +58,16 @@ function execute(initialRegisterValues: [string, number][]) {
     let step = 1
     switch (instruction.kind) {
       case 'inc':
-        registers.set(instruction.x, registers.get(instruction.x)! + 1)
+        registers[instruction.x]++
         break
       case 'dec':
-        registers.set(instruction.x, registers.get(instruction.x)! - 1)
+        registers[instruction.x]--
         break
       case 'jnz':
-        const valueToCheck = getNumValue(instruction.x)
-        if (valueToCheck) step = instruction.y
+        if (getNumValue(instruction.x)) step = instruction.y
         break
       case 'cpy':
-        const valueToCopy = getNumValue(instruction.x)
-        registers.set(instruction.y, valueToCopy)
+        registers[instruction.y] = getNumValue(instruction.x)
         break
     }
     counter += step
@@ -73,8 +75,8 @@ function execute(initialRegisterValues: [string, number][]) {
   return registers
 }
 
-const registersPart1 = execute([['a', 0], ['b', 0], ['c', 0], ['d', 0]])
-console.log(`Part 1: ${registersPart1.get('a')}`)
+const registersPart1 = execute({ a: 0, b: 0, c: 0, d: 0 })
+console.log(`Part 1: ${registersPart1.a}`)
 
-const registersPart2 = execute([['a', 0], ['b', 0], ['c', 1], ['d', 0]])
-console.log(`Part 2: ${registersPart2.get('a')}`)
+const registersPart2 = execute({ a: 0, b: 0, c: 1, d: 0 })
+console.log(`Part 2: ${registersPart2.a}`)
