@@ -1,4 +1,4 @@
-import { readInputFile } from '../utils'
+import { readLines } from '../utils'
 
 interface GoesCommand {
   kind: 'goes'
@@ -20,30 +20,38 @@ type Command = GoesCommand | GivesCommand
 const goesPattern = /(?<value>\d+) (?<kind>goes) .+ (?<bot>\d+)/
 const givesPattern = /(?<bot>\d+) (?<kind>gives) .+ (?<entityLow>\w+) (?<indexLow>\d+) .+ (?<entityHigh>\w+) (?<indexHigh>\d+)/
 
-const instructions: Command[] = readInputFile('day-10.txt')
-  .split('\n')
-  .map(line => {
-    const pattern = /goes/.test(line) ? goesPattern : givesPattern
-    const match = pattern.exec(line)
-    if (!match || !match.groups) throw new Error('Incorrect input')
-    switch (match.groups.kind as 'goes' | 'gives') {
-      case 'goes':
-        return {
-          kind: match.groups.kind,
-          value: +match.groups.value,
-          bot: +match.groups.bot
-        } as GoesCommand
-      case 'gives':
-        return {
-          kind: match.groups.kind,
-          bot: +match.groups.bot,
-          entityLow: match.groups.entityLow,
-          indexLow: +match.groups.indexLow,
-          entityHigh: match.groups.entityHigh,
-          indexHigh: +match.groups.indexHigh
-        } as GivesCommand
-    }
-  })
+const getCommand = (line: string) => {
+  const pattern = /goes/.test(line) ? goesPattern : givesPattern
+  const match = pattern.exec(line)
+  if (!match || !match.groups) throw new Error('Incorrect input')
+  const {
+    kind,
+    value,
+    bot,
+    entityLow,
+    indexLow,
+    entityHigh,
+    indexHigh
+  } = match.groups
+
+  switch (kind) {
+    case 'goes':
+      return { kind, value: +value, bot: +bot }
+    case 'gives':
+      return {
+        kind,
+        bot: +bot,
+        entityLow,
+        indexLow: +indexLow,
+        entityHigh,
+        indexHigh: +indexHigh
+      }
+    default:
+      throw new Error('Incorrect input')
+  }
+}
+
+const instructions: Command[] = readLines('day-10.txt').map(getCommand)
 
 const state = {
   bots: new Map<number, Array<number>>(),

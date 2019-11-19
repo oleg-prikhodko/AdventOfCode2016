@@ -1,9 +1,7 @@
-import { readInputFile } from '../utils'
+import { readLines } from '../utils'
 import { getInstruction, execute } from '../assembunny'
 
-const instructions = readInputFile('day-12.txt')
-  .split('\n')
-  .map(getInstruction)
+const instructions = readLines('day-12.txt').map(getInstruction)
 
 const registersPart1 = execute(instructions)
 console.log(`Part 1: ${registersPart1.a}`)

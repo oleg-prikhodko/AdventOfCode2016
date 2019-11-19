@@ -1,4 +1,4 @@
-import { readInputFile, countLetters } from '../utils'
+import { readLines, countLetters } from '../utils'
 
 interface Room {
   name: string
@@ -21,9 +21,7 @@ function isRealRoom({ name, checksum }: Room) {
   return checksum === genChecksum(countLetters(name.replace(/-/g, ''), 5))
 }
 
-const rooms = readInputFile('day-4.txt')
-  .split('\n')
-  .map(readData)
+const rooms = readLines('day-4.txt').map(readData)
 
 const realRooms = rooms.filter(isRealRoom)
 const sectorSum = realRooms.reduce((acc, { sectorId }) => acc + sectorId, 0)

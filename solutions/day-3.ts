@@ -1,4 +1,4 @@
-import { readInputFile } from '../utils'
+import { readLines } from '../utils'
 
 type Triangle = [number, number, number]
 
@@ -8,14 +8,12 @@ function isPossible([a, b, c]: Triangle) {
 
 const pattern = /(\d+)\s+(\d+)\s+(\d+)/
 
-const triangles = readInputFile('day-3.txt')
-  .split('\n')
-  .map(line => {
-    const match = pattern.exec(line)
-    if (!match) throw new Error('Incorrect input')
-    const [, ...sides] = match
-    return sides.map(Number) as Triangle
-  })
+const triangles = readLines('day-3.txt').map(line => {
+  const match = pattern.exec(line)
+  if (!match) throw new Error('Incorrect input')
+  const [, ...sides] = match
+  return sides.map(Number) as Triangle
+})
 
 console.log(`Part 1: ${triangles.filter(isPossible).length}`)
 

@@ -1,5 +1,5 @@
 import { equal } from 'assert'
-import { readInputFile, range } from '../utils'
+import { readLines, range } from '../utils'
 
 interface TwoPositions {
   posX: number
@@ -185,8 +185,6 @@ const testResult = 'decab'
 equal(scramble(testInstructions, testPass), testResult)
 equal(unscramble(testInstructions, testResult), testPass)
 
-const instructions = readInputFile('day-21.txt')
-  .split('\n')
-  .map(getInstruction)
+const instructions = readLines('day-21.txt').map(getInstruction)
 console.log('Part 1:', scramble(instructions, 'abcdefgh'))
 console.log('Part 2:', unscramble(instructions, 'fbgdceah'))

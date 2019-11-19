@@ -10,6 +10,10 @@ export function readInputFile(inputFileName: string) {
   }
 }
 
+export function readLines(inputFileName: string) {
+  return readInputFile(inputFileName).split('\n')
+}
+
 export function* range(start: number, limit: number) {
   let count = start
   while (count !== limit) {

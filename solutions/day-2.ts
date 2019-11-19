@@ -1,4 +1,4 @@
-import { readInputFile, getRowCol, getIndex, range } from '../utils'
+import { readLines, getRowCol, getIndex, range } from '../utils'
 
 type Movement = 'U' | 'D' | 'L' | 'R'
 
@@ -16,7 +16,7 @@ function getNewIndex(buttonIndex: number, movement: Movement, side: number) {
   }
 }
 
-const instructions = readInputFile('day-2.txt').split('\n')
+const instructions = readLines('day-2.txt')
 
 type GetNewIndex = (index: number, movement: Movement, side: number) => number
 
@@ -47,7 +47,7 @@ console.log(`Part 1: ${getCode(side_1, startIndex_1, getNewIndex, buttons_1)}`)
 const includedIndexes = Array.from(range(0, 5 ** 2 - 1)).filter(el => {
   const [row, col] = getRowCol(el, 5)
   return (
-    (row > 0 && col > 0 && row < 4 && col < 4) || (row % 5 == 2 || col % 5 == 2)
+    (row > 0 && col > 0 && row < 4 && col < 4) || row % 5 == 2 || col % 5 == 2
   )
 })
 

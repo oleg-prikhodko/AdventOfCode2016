@@ -1,4 +1,4 @@
-import { readInputFile, getRowCol, getIndex, make2d } from '../utils'
+import { readLines, getRowCol, getIndex, make2d } from '../utils'
 
 interface RectCommand {
   type: 'rect'
@@ -18,31 +18,25 @@ type Command = RectCommand | RotateCommand
 const rectPattern = /^(?<type>rect) (?<width>\w+)x(?<height>\w+)$/
 const rotatePattern = /^(?<type>rotate) \w+ (?<axis>x|y)=(?<index>\d+) by (?<units>\d+)$/
 
-const commands: Command[] = readInputFile('day-8.txt')
-  .split('\n')
-  .map(line => {
-    const match = /rect/.test(line)
-      ? rectPattern.exec(line)
-      : rotatePattern.exec(line)
+const getCommand = (line: string) => {
+  const match = /rect/.test(line)
+    ? rectPattern.exec(line)
+    : rotatePattern.exec(line)
 
-    if (!match || !match.groups) throw new Error('Incorrect input')
+  if (!match || !match.groups) throw new Error('Incorrect input')
+  const { type, width, height, axis, index, units } = match.groups
 
-    switch (match.groups.type as 'rect' | 'rotate') {
-      case 'rect':
-        return {
-          type: match.groups.type,
-          width: +match.groups.width,
-          height: +match.groups.height
-        } as RectCommand
-      case 'rotate':
-        return {
-          type: match.groups.type,
-          axis: match.groups.axis,
-          index: +match.groups.index,
-          units: +match.groups.units
-        } as RotateCommand
-    }
-  })
+  switch (type) {
+    case 'rect':
+      return { type, width: +width, height: +height }
+    case 'rotate':
+      return { type, axis, index: +index, units: +units }
+    default:
+      throw new Error('Incorrect input')
+  }
+}
+
+const commands: Command[] = readLines('day-8.txt').map(getCommand)
 
 const screenWidth = 50
 const screenHeight = 6
@@ -94,4 +88,9 @@ const pixelsLit = s.reduce((acc, pix) => acc + pix)
 console.log(`Part 1: ${pixelsLit}`)
 console.log('Part 2:')
 // pretty print to be readable
-console.table(make2d(s.map(n => (n === 1 ? '0' : null)), screenWidth))
+console.table(
+  make2d(
+    s.map(n => (n === 1 ? '0' : null)),
+    screenWidth
+  )
+)

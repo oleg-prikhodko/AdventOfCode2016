@@ -1,4 +1,4 @@
-import { readInputFile } from '../utils'
+import { readLines } from '../utils'
 
 interface Range {
   lower: number
@@ -6,8 +6,7 @@ interface Range {
 }
 
 const allowedRanges: Range[] = []
-const blockedRanges: Range[] = readInputFile('day-20.txt')
-  .split('\n')
+const blockedRanges: Range[] = readLines('day-20.txt')
   .map(line => {
     const { lower, upper } = /(?<lower>\d+)-(?<upper>\d+)/.exec(line)!.groups!
     return { lower: +lower, upper: +upper }

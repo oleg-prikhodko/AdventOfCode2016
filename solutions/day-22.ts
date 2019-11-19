@@ -1,4 +1,4 @@
-import { readInputFile } from '../utils'
+import { readLines } from '../utils'
 
 interface Node {
   x: number
@@ -11,8 +11,7 @@ interface Node {
 
 const nodePattern = /x(\d+)-y(\d+)\s+(\d+)T\s+(\d+)T\s+(\d+)T\s+(\d+)%/
 
-const nodes: Node[] = readInputFile('day-22.txt')
-  .split('\n')
+const nodes: Node[] = readLines('day-22.txt')
   .slice(2)
   .map(line => {
     const match = nodePattern.exec(line)!

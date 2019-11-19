@@ -1,4 +1,4 @@
-import { readInputFile } from '../utils'
+import { readLines } from '../utils'
 
 function hasABBA(str: string): boolean {
   if (str.length < 4) {
@@ -22,7 +22,7 @@ function getSequences(ip: string) {
   return { hypernetSeqs, supernetSeqs }
 }
 
-const ips = readInputFile('day-7.txt').split('\n')
+const ips = readLines('day-7.txt')
 
 const supportsTLS = ips.filter(ip => {
   const { hypernetSeqs, supernetSeqs } = getSequences(ip)

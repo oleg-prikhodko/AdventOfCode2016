@@ -1,4 +1,4 @@
-import { readInputFile, range } from '../utils'
+import { readLines, range } from '../utils'
 
 interface Disc {
   id: number
@@ -27,12 +27,10 @@ function calcTimeToPress(discs: Disc[]) {
 
 const discPattern = /(?<id>\d+).+ (?<total>\d+).+(?<current>\d+)\.$/
 
-const initialState: Disc[] = readInputFile('day-15.txt')
-  .split('\n')
-  .map(line => {
-    const { id, total, current } = line.match(discPattern)!.groups!
-    return { id: +id, totalPositions: +total, currentPosition: +current }
-  })
+const initialState: Disc[] = readLines('day-15.txt').map(line => {
+  const { id, total, current } = line.match(discPattern)!.groups!
+  return { id: +id, totalPositions: +total, currentPosition: +current }
+})
 
 console.log('Part 1:', calcTimeToPress(initialState))
 
