@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from 'fs'
 import { join } from 'path'
+import { createHash } from 'crypto'
 
 export function readInputFile(inputFileName: string) {
   const fullPath = join(__dirname, 'inputs', inputFileName)
@@ -71,4 +72,52 @@ export function make2d<T>(arr: Array<T>, width: number) {
     else acc[idx].push(val)
     return acc
   }, Array<Array<T>>())
+}
+
+interface Node<T> {
+  value: T
+  prev?: Node<T>
+  next?: Node<T>
+}
+
+export class Queue<T> {
+  private first?: Node<T>
+  private last?: Node<T>
+
+  constructor(els?: T[]) {
+    if (els) els.forEach(this.add.bind(this))
+  }
+
+  add(el: T) {
+    const node = this.last ? { prev: this.last, value: el } : { value: el }
+    if (this.last) {
+      this.last.next = node
+      this.last = node
+    } else {
+      this.first = node
+      this.last = node
+    }
+  }
+
+  remove() {
+    const first = this.first
+    if (first) {
+      const next = first.next
+      if (next) {
+        next.prev = undefined
+        if (!next.next) this.last = next
+        this.first = next
+      } else {
+        this.first = undefined
+        this.last = undefined
+      }
+      return first.value
+    }
+  }
+}
+
+export function md5(data: string) {
+  return createHash('md5')
+    .update(data)
+    .digest('hex')
 }

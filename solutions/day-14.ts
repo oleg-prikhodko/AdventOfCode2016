@@ -1,23 +1,16 @@
-import { createHash } from 'crypto'
-import { range } from '../utils'
-
-function getMD5(data: string) {
-  return createHash('md5')
-    .update(data)
-    .digest('hex')
-}
+import { range, md5 } from '../utils'
 
 type HashGenerator = Generator<[string, number]>
 
 function* getHashGen(salt: string, limit: number): HashGenerator {
   for (const index of range(0, limit)) {
-    yield [getMD5(`${salt}${index}`), index]
+    yield [md5(`${salt}${index}`), index]
   }
 }
 
 function* getStretchedHashGen(salt: string, limit: number): HashGenerator {
   for (const [hash, index] of getHashGen(salt, limit)) {
-    const stretchedHash = Array.from(range(0, 2015)).reduce(getMD5, hash)
+    const stretchedHash = Array.from(range(0, 2015)).reduce(md5, hash)
     yield [stretchedHash, index]
   }
 }

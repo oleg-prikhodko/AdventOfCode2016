@@ -1,12 +1,9 @@
-import { createHash } from 'crypto'
-import { range } from '../utils'
+import { range, md5 } from '../utils'
 
 function* getHex(data: string, limit: number = 8) {
   let count = 0
   for (const num of range(0, Number.MAX_VALUE)) {
-    const hex = createHash('md5')
-      .update(`${data}${num}`)
-      .digest('hex')
+    const hex = md5(`${data}${num}`)
     if (/^0{5,}/.test(hex)) {
       count++
       yield hex
